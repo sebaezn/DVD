@@ -1,0 +1,15 @@
+/Users/sebastianbaez/Desktop/DVD/bin/Debug/net6.0/DVD
+/Users/sebastianbaez/Desktop/DVD/bin/Debug/net6.0/DVD.deps.json
+/Users/sebastianbaez/Desktop/DVD/bin/Debug/net6.0/DVD.runtimeconfig.json
+/Users/sebastianbaez/Desktop/DVD/bin/Debug/net6.0/DVD.dll
+/Users/sebastianbaez/Desktop/DVD/bin/Debug/net6.0/DVD.pdb
+/Users/sebastianbaez/Desktop/DVD/obj/Debug/net6.0/DVD.csproj.AssemblyReference.cache
+/Users/sebastianbaez/Desktop/DVD/obj/Debug/net6.0/DVD.GeneratedMSBuildEditorConfig.editorconfig
+/Users/sebastianbaez/Desktop/DVD/obj/Debug/net6.0/DVD.AssemblyInfoInputs.cache
+/Users/sebastianbaez/Desktop/DVD/obj/Debug/net6.0/DVD.AssemblyInfo.cs
+/Users/sebastianbaez/Desktop/DVD/obj/Debug/net6.0/DVD.csproj.CoreCompileInputs.cache
+/Users/sebastianbaez/Desktop/DVD/obj/Debug/net6.0/DVD.dll
+/Users/sebastianbaez/Desktop/DVD/obj/Debug/net6.0/refint/DVD.dll
+/Users/sebastianbaez/Desktop/DVD/obj/Debug/net6.0/DVD.pdb
+/Users/sebastianbaez/Desktop/DVD/obj/Debug/net6.0/DVD.genruntimeconfig.cache
+/Users/sebastianbaez/Desktop/DVD/obj/Debug/net6.0/ref/DVD.dll

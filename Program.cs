@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+
 namespace CommunityLibraryDVD
 {
     class Program
@@ -33,7 +33,7 @@ namespace CommunityLibraryDVD
                 }
             }
         }
-
+        // Placeholder methods for actions in the menu ------------------------------------------------------ Methods for StaffMenu
         static void AuthenticateStaff()
         {
             Console.WriteLine("Enter username:");
@@ -70,7 +70,7 @@ namespace CommunityLibraryDVD
                 Console.WriteLine("Authentication failed or member not found.");
             }
         }
-
+        // Placeholder methods for actions in the menu ------------------------------------------------------ Methods for StaffMenu
         static void StaffMenu()
         {
             bool running = true;
@@ -249,7 +249,7 @@ namespace CommunityLibraryDVD
             Console.WriteLine("Movie added successfully.");
         }
 
-
+        // Placeholder methods for actions in the menu ------------------------------------------------------ Methods for StaffMenu
         static void RemoveMovie()
         {
             Console.WriteLine("Enter movie title to remove:");
@@ -388,15 +388,15 @@ namespace CommunityLibraryDVD
     }            
     public class MovieCollection
     {
-        private List<Movie>[] movies;
+        private MovieNode[][] movies; // Using an array of arrays for buckets
         private int capacity = 1000;
 
         public MovieCollection()
         {
-            movies = new List<Movie>[capacity];
+            movies = new MovieNode[capacity][];
             for (int i = 0; i < capacity; i++)
             {
-                movies[i] = new List<Movie>();
+                movies[i] = null; // Start with no chains
             }
         }
 
@@ -413,33 +413,62 @@ namespace CommunityLibraryDVD
         public void AddMovie(Movie movie)
         {
             int index = HashFunction(movie.Title);
-            var bucket = movies[index];
-            foreach (var m in bucket)
+            if (movies[index] == null)
             {
-                if (m.Title == movie.Title)
-                {
-                    // Update existing movie details if needed
-                    return;
-                }
+                movies[index] = new MovieNode[1]; // Start with an initial size
+                movies[index][0] = new MovieNode(movie);
             }
-            bucket.Add(movie);
+            else
+            {
+                // Check if the movie exists, if not add a new node
+                for (int i = 0; i < movies[index].Length; i++)
+                {
+                    if (movies[index][i].Movie.Title == movie.Title)
+                    {
+                        return; // Movie already exists
+                    }
+                }
+                int newSize = movies[index].Length + 1;
+                MovieNode[] newBucket = new MovieNode[newSize];
+                Array.Copy(movies[index], newBucket, movies[index].Length);
+                newBucket[newSize - 1] = new MovieNode(movie);
+                movies[index] = newBucket;
+            }
         }
 
         public void RemoveMovie(string title)
         {
             int index = HashFunction(title);
-            var bucket = movies[index];
-            bucket.RemoveAll(m => m.Title == title);
+            if (movies[index] != null)
+            {
+                int newSize = movies[index].Length - 1;
+                MovieNode[] newBucket = new MovieNode[newSize];
+                int j = 0;
+                for (int i = 0; i < movies[index].Length; i++)
+                {
+                    if (movies[index][i].Movie.Title != title)
+                    {
+                        newBucket[j++] = movies[index][i];
+                    }
+                }
+                if (j == newSize)
+                    movies[index] = newBucket;
+                else
+                    movies[index] = null; // If no movies left, set to null
+            }
         }
 
         public Movie GetMovie(string title)
         {
             int index = HashFunction(title);
-            foreach (var movie in movies[index])
+            if (movies[index] != null)
             {
-                if (movie.Title == title)
+                foreach (var node in movies[index])
                 {
-                    return movie;
+                    if (node.Movie.Title == title)
+                    {
+                        return node.Movie;
+                    }
                 }
             }
             return null; // Movie not found
@@ -449,14 +478,28 @@ namespace CommunityLibraryDVD
         {
             foreach (var bucket in movies)
             {
-                foreach (var movie in bucket)
+                if (bucket != null)
                 {
-                    movie.DisplayInfo();
-                    Console.WriteLine(); // For better formatting
+                    foreach (var movieNode in bucket)
+                    {
+                        movieNode.Movie.DisplayInfo();
+                        Console.WriteLine(); // For better formatting
+                    }
                 }
             }
         }
+
+        private class MovieNode
+        {
+            public Movie Movie { get; private set; }
+
+            public MovieNode(Movie movie)
+            {
+                this.Movie = movie;
+            }
+        }
     }
+
     public class Member
     {
         public string FirstName { get; private set; }

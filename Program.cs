@@ -154,16 +154,129 @@ namespace CommunityLibraryDVD
         }
 
         // Placeholder methods for actions in the menu
-        static void AddMovie() { /* Implementation here */ }
-        static void RemoveMovie() { /* Implementation here */ }
-        static void RegisterMember() { /* Implementation here */ }
-        static void RemoveMember() { /* Implementation here */ }
-        static void FindMemberContact() { /* Implementation here */ }
-        static void DisplayAllMovies() { /* Implementation here */ }
-        static void ViewMovieDetails() { /* Implementation here */ }
-        static void BorrowMovie(Member member) { /* Implementation here */ }
-        static void ReturnMovie(Member member) { /* Implementation here */ }
-        static void ListBorrowedMovies(Member member) { /* Implementation here */ }
+        static void AddMovie()
+        {
+            Console.WriteLine("Enter movie title:");
+            string title = Console.ReadLine();
+            Console.WriteLine("Enter genre:");
+            string genre = Console.ReadLine();
+            Console.WriteLine("Enter classification:");
+            string classification = Console.ReadLine();
+            Console.WriteLine("Enter duration in minutes:");
+            int duration = int.Parse(Console.ReadLine());
+
+            Movie movie = new Movie(title, genre, classification, duration);
+            movieCollection.AddMovie(movie);
+
+            Console.WriteLine("Movie added successfully.");
+        }
+
+        static void RemoveMovie()
+        {
+            Console.WriteLine("Enter movie title to remove:");
+            string title = Console.ReadLine();
+
+            movieCollection.RemoveMovie(title);
+            Console.WriteLine("Movie removed successfully if it existed.");
+        }
+
+        static void RegisterMember() 
+        {
+            Console.WriteLine("Enter first name:");
+            string firstName = Console.ReadLine();
+            Console.WriteLine("Enter last name:");
+            string lastName = Console.ReadLine();
+            Console.WriteLine("Enter contact number:");
+            string contactNumber = Console.ReadLine();
+            Console.WriteLine("Set a 4-digit password:");
+            string password = Console.ReadLine();
+
+            Member member = new Member(firstName, lastName, contactNumber, password);
+            memberCollection.AddMember(member);
+
+            Console.WriteLine("Member registered successfully.");
+        }
+
+        static void RemoveMember()
+        {
+            Console.WriteLine("Enter first name of member to remove:");
+            string firstName = Console.ReadLine();
+            Console.WriteLine("Enter last name of member to remove:");
+            string lastName = Console.ReadLine();
+
+            memberCollection.RemoveMember(firstName, lastName);
+            Console.WriteLine("Member removed successfully if they existed and had no borrowed DVDs.");
+        }
+
+        static void FindMemberContact()
+        {
+            Console.WriteLine("Enter first name of the member:");
+            string firstName = Console.ReadLine();
+            Console.WriteLine("Enter last name of the member:");
+            string lastName = Console.ReadLine();
+
+            Member member = memberCollection.FindMember(firstName, lastName);
+            if (member != null)
+            {
+                Console.WriteLine($"Contact number for {firstName} {lastName} is {member.ContactNumber}");
+            }
+            else
+            {
+                Console.WriteLine("Member not found.");
+            }
+        }
+
+        static void DisplayAllMovies()
+        {
+            movieCollection.DisplayAllMovies();
+        }
+
+        static void ViewMovieDetails()
+        {
+            Console.WriteLine("Enter movie title to view details:");
+            string title = Console.ReadLine();
+
+            Movie movie = movieCollection.GetMovie(title);
+            if (movie != null)
+            {
+                movie.DisplayInfo();
+            }
+            else
+            {
+                Console.WriteLine("Movie not found.");
+            }
+        }
+
+        static void BorrowMovie(Member member)
+        {
+            Console.WriteLine("Enter title of the movie to borrow:");
+            string title = Console.ReadLine();
+
+            Movie movie = movieCollection.GetMovie(title);
+            if (movie != null)
+            {
+                member.BorrowMovie(title);
+                Console.WriteLine("Movie borrowed successfully.");
+            }
+            else
+            {
+                Console.WriteLine("Movie not available.");
+            }
+        }
+        static void ReturnMovie(Member member)
+        {
+            Console.WriteLine("Enter title of the movie to return:");
+            string title = Console.ReadLine();
+
+            member.ReturnMovie(title);
+            Console.WriteLine("Movie returned successfully.");
+        }
+        static void ListBorrowedMovies(Member member)
+        {
+            Console.WriteLine("Movies currently borrowed:");
+            member.ListBorrowedMovies();
+        }
+
     }
     
     public class Movie

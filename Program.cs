@@ -154,100 +154,77 @@ namespace CommunityLibraryDVD
         }
 
         // Placeholder methods for actions in the menu ------------------------------------------------------ Methods for StaffMenu
-        static void AddMovie()
+    static void AddMovie()
+    {
+        Console.WriteLine("Enter movie title:");
+        string title = Console.ReadLine();
+
+        Console.WriteLine("Enter number of copies:");
+        int copies;
+        while (!int.TryParse(Console.ReadLine(), out copies))
         {
-            Console.WriteLine("Enter movie title:");
-            string title = Console.ReadLine();
-            Console.WriteLine("Choose genre:");
-            Console.WriteLine("1: Drama");
-            Console.WriteLine("2: Adventure");
-            Console.WriteLine("3: Family");
-            Console.WriteLine("4: Action");
-            Console.WriteLine("5: Sci-fi");
-            Console.WriteLine("6: Comedy");
-            Console.WriteLine("7: Animated");
-            Console.WriteLine("8: Thriller");
-            Console.WriteLine("9: Other");
-            string genre = Console.ReadLine();
-            switch (genre)
-            {
-                case "1":
-                    genre = "Drama";
-                    break;
-                case "2":
-                    genre = "Adventure";
-                    break;
-                case "3":
-                    genre = "Family";
-                    break;
-                case "4":
-                    genre = "Action";
-                    break;
-                case "5":
-                    genre = "Sci-fi";
-                    break;
-                case "6":
-                    genre = "Comedy";
-                    break;
-                case "7":
-                    genre = "Animated";
-                    break;
-                case "8":
-                    genre = "Thriller";
-                    break;
-                case "9":
-                    genre = "Other";
-                    break;
-                default:
-                    Console.WriteLine("Invalid choice, setting default genre to Other.");
-                    genre = "Other";
-                    break;
-            }
-
-            // Displaying classification choices
-            Console.WriteLine("Choose classification:");
-            Console.WriteLine("1: General (G)");
-            Console.WriteLine("2: Parental Guidance (PG)");
-            Console.WriteLine("3: Mature (M15+)");
-            Console.WriteLine("4: Mature Accompanied (MA15+)");
-            string classificationChoice = Console.ReadLine();
-
-            // Assigning the classification based on user input
-            string classification = "";
-            switch (classificationChoice)
-            {
-                case "1":
-                    classification = "G";
-                    break;
-                case "2":
-                    classification = "PG";
-                    break;
-                case "3":
-                    classification = "M15+";
-                    break;
-                case "4":
-                    classification = "MA15+";
-                    break;
-                default:
-                    Console.WriteLine("Invalid choice, setting default classification to General (G).");
-                    classification = "G";
-                    break;
-            }
-
-            Console.WriteLine("Enter duration in minutes:");
-            int duration;
-            // Adding error handling for duration input
-            while (!int.TryParse(Console.ReadLine(), out duration))
-            {
-                Console.WriteLine("Invalid input. Please enter a number for the duration.");
-            }
-
-            // Creating a new movie object with user inputs
-            Movie movie = new Movie(title, genre, classification, duration);
-            movieCollection.AddMovie(movie);
-
-            Console.WriteLine("Movie added successfully.");
+            Console.WriteLine("Invalid input. Please enter a number for the copies.");
         }
+
+        Movie existingMovie = movieCollection.GetMovie(title);
+        if (existingMovie != null)
+        {
+            existingMovie.AddCopies(copies);
+            Console.WriteLine("Additional copies added successfully.");
+            return;
+        }
+
+        Console.WriteLine("Choose genre:");
+        Console.WriteLine("1: Drama");
+        Console.WriteLine("2: Adventure");
+        Console.WriteLine("3: Family");
+        Console.WriteLine("4: Action");
+        Console.WriteLine("5: Sci-fi");
+        Console.WriteLine("6: Comedy");
+        Console.WriteLine("7: Animated");
+        Console.WriteLine("8: Thriller");
+        Console.WriteLine("9: Other");
+        string genre = Console.ReadLine();
+        switch (genre)
+        {
+            case "1": genre = "Drama"; break;
+            case "2": genre = "Adventure"; break;
+            case "3": genre = "Family"; break;
+            case "4": genre = "Action"; break;
+            case "5": genre = "Sci-fi"; break;
+            case "6": genre = "Comedy"; break;
+            case "7": genre = "Animated"; break;
+            case "8": genre = "Thriller"; break;
+            case "9": genre = "Other"; break;
+            default: genre = "Other"; break;
+        }
+
+        Console.WriteLine("Choose classification:");
+        Console.WriteLine("1: General (G)");
+        Console.WriteLine("2: Parental Guidance (PG)");
+        Console.WriteLine("3: Mature (M15+)");
+        Console.WriteLine("4: Mature Accompanied (MA15+)");
+        string classificationChoice = Console.ReadLine();
+        string classification = classificationChoice switch
+        {
+            "1" => "G",
+            "2" => "PG",
+            "3" => "M15+",
+            "4" => "MA15+",
+            _ => "G",
+        };
+
+        Console.WriteLine("Enter duration in minutes:");
+        int duration;
+        while (!int.TryParse(Console.ReadLine(), out duration))
+        {
+            Console.WriteLine("Invalid input. Please enter a number for the duration.");
+        }
+
+        Movie movie = new Movie(title, genre, classification, duration, copies);
+        movieCollection.AddMovie(movie);
+        Console.WriteLine("Movie added successfully.");
+    }
 
         // Placeholder methods for actions in the menu ------------------------------------------------------ Methods for StaffMenu
         static void RemoveMovie()
@@ -367,16 +344,22 @@ namespace CommunityLibraryDVD
         public string Genre { get; private set; }
         public string Classification { get; private set; }
         public int Duration { get; private set; }
+        public int Copies { get; private set; }
 
         // Constructor to initialize a new movie
-        public Movie(string title, string genre, string classification, int duration)
+        public Movie(string title, string genre, string classification, int duration, int copies)
         {
             Title = title;
             Genre = genre;
             Classification = classification;
             Duration = duration;
+            Copies = copies;
         }
 
+        public void AddCopies(int additionalCopies)
+        {
+            Copies += additionalCopies;
+        }
         // Method to display movie information
         public void DisplayInfo()
         {
@@ -384,6 +367,7 @@ namespace CommunityLibraryDVD
             Console.WriteLine($"Genre: {Genre}");
             Console.WriteLine($"Classification: {Classification}");
             Console.WriteLine($"Duration: {Duration} minutes");
+            Console.WriteLine($"Copies available: {Copies}");
         }
     }            
     public class MovieCollection

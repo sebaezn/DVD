@@ -373,30 +373,64 @@ namespace CommunityLibraryDVD
             }
         }
 
-        static void BorrowMovie(Member member)
+       static void BorrowMovie(Member member)
         {
             Console.WriteLine("Enter title of the movie to borrow:");
             string title = Console.ReadLine();
-
             Movie movie = movieCollection.GetMovie(title);
+
             if (movie != null)
             {
-                member.BorrowMovie(title);
-                Console.WriteLine("Movie borrowed successfully.");
+                if (movie.Copies > 0)
+                {
+                    if (!member.HasBorrowedMovie(title))
+                    {
+                        member.BorrowMovie(title);
+                        movie.AddCopies(-1); // Decrease the number of available copies
+                        Console.WriteLine("Movie borrowed successfully.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("You have already borrowed this movie.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Cannot borrow the movie. There are no available copies.");
+                }
             }
             else
             {
                 Console.WriteLine("Movie not available.");
             }
         }
+
+
         static void ReturnMovie(Member member)
         {
             Console.WriteLine("Enter title of the movie to return:");
             string title = Console.ReadLine();
+            Movie movie = movieCollection.GetMovie(title);
 
-            member.ReturnMovie(title);
-            Console.WriteLine("Movie returned successfully.");
+            if (movie != null)
+            {
+                if (member.HasBorrowedMovie(title))
+                {
+                    member.ReturnMovie(title);
+                    movie.AddCopies(1); // Increase the number of available copies
+                    Console.WriteLine("Movie returned successfully.");
+                }
+                else
+                {
+                    Console.WriteLine("You haven't borrowed this movie.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Movie not found in the collection.");
+            }
         }
+
         static void ListBorrowedMovies(Member member)
         {
             Console.WriteLine("Movies currently borrowed:");

@@ -11,6 +11,7 @@ namespace CommunityLibraryDVD
         {
             while (true)
             {
+                
                 Console.WriteLine("Welcome to the Community Library DVD Management System!");
                 Console.WriteLine("Are you a (1) Staff or (2) Member? Enter '0' to close the application.");
                 string userType = Console.ReadLine();
@@ -82,7 +83,8 @@ namespace CommunityLibraryDVD
                 Console.WriteLine("3. Register Member");
                 Console.WriteLine("4. Remove Member");
                 Console.WriteLine("5. Find Member Contact");
-                Console.WriteLine("6. Exit");
+                Console.WriteLine("6. List Borrowers of a Movie"); // New option
+                Console.WriteLine("7. Exit");
 
                 string choice = Console.ReadLine();
                 switch (choice)
@@ -103,7 +105,13 @@ namespace CommunityLibraryDVD
                         FindMemberContact();
                         break;
                     case "6":
+                        ListBorrowersOfMovie(); // Added missing parentheses
+                        break;
+                    case "7":
                         running = false;
+                        break;
+                    case "00":
+                        DisplayAllMovies();
                         break;
                     default:
                         Console.WriteLine("Invalid option, please try again.");
@@ -111,6 +119,7 @@ namespace CommunityLibraryDVD
                 }
             }
         }
+
 
         static void MemberMenu(Member member)
         {
@@ -161,9 +170,15 @@ namespace CommunityLibraryDVD
 
         Console.WriteLine("Enter number of copies:");
         int copies;
-        while (!int.TryParse(Console.ReadLine(), out copies))
+        while (!int.TryParse(Console.ReadLine(), out copies) || copies < 0)
         {
-            Console.WriteLine("Invalid input. Please enter a number for the copies.");
+            Console.WriteLine("Invalid input. Please enter a non-negative number for the copies.");
+        }
+
+        if (copies == 0)
+        {
+            Console.WriteLine("Cannot add a movie with zero copies.");
+            return;
         }
 
         Movie existingMovie = movieCollection.GetMovie(title);
@@ -227,31 +242,86 @@ namespace CommunityLibraryDVD
     }
 
         // Placeholder methods for actions in the menu ------------------------------------------------------ Methods for StaffMenu
-        static void RemoveMovie()
+       static void RemoveMovie()
         {
             Console.WriteLine("Enter movie title to remove:");
             string title = Console.ReadLine();
+            
+            Movie movie = movieCollection.GetMovie(title);
+            if (movie == null)
+            {
+                Console.WriteLine("Movie not found.");
+                return;
+            }
+            
+            Console.WriteLine($"Current number of copies: {movie.Copies}");
+            Console.WriteLine("Enter the number of copies to remove:");
+            
+            int copiesToRemove;
+            while (!int.TryParse(Console.ReadLine(), out copiesToRemove) || copiesToRemove <= 0)
+            {
+                Console.WriteLine("Invalid input. Please enter a positive number for the copies.");
+            }
 
-            movieCollection.RemoveMovie(title);
-            Console.WriteLine("Movie removed successfully if it existed.");
+            if (copiesToRemove > movie.Copies)
+            {
+                Console.WriteLine("Cannot remove more copies than available.");
+                return;
+            }
+
+            movie.AddCopies(-copiesToRemove); // Subtracting copies
+
+            if (movie.Copies == 0)
+            {
+                movieCollection.RemoveMovie(title);
+                Console.WriteLine("All copies removed. Movie information deleted from the system.");
+            }
+            else
+            {
+                Console.WriteLine($"Remaining number of copies: {movie.Copies}");
+            }
         }
 
-        static void RegisterMember() 
+
+
+       static void RegisterMember() 
         {
             Console.WriteLine("Enter first name:");
             string firstName = Console.ReadLine();
             Console.WriteLine("Enter last name:");
             string lastName = Console.ReadLine();
+
+            // Check if the member already exists
+            if (memberCollection.FindMember(firstName, lastName) != null)
+            {
+                Console.WriteLine("Member already exists.");
+                return;
+            }
+
             Console.WriteLine("Enter contact number:");
             string contactNumber = Console.ReadLine();
-            Console.WriteLine("Set a 4-digit password:");
-            string password = Console.ReadLine();
+
+            string password;
+            while (true)
+            {
+                Console.WriteLine("Set a 4-digit password:");
+                password = Console.ReadLine();
+                if (password.Length == 4 && int.TryParse(password, out _))
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid password. Please enter a 4-digit numeric password.");
+                }
+            }
 
             Member member = new Member(firstName, lastName, contactNumber, password);
             memberCollection.AddMember(member);
 
             Console.WriteLine("Member registered successfully.");
         }
+
 
         static void RemoveMember()
         {
@@ -333,8 +403,37 @@ namespace CommunityLibraryDVD
             member.ListBorrowedMovies();
         }
 
-    }
+        static void ListBorrowersOfMovie()
+        {
+            Console.WriteLine("Enter movie title to list borrowers:");
+            string title = Console.ReadLine();
 
+            Movie movie = movieCollection.GetMovie(title);
+            if (movie == null)
+            {
+                Console.WriteLine("Movie not found.");
+                return;
+            }
+
+            Console.WriteLine($"Listing borrowers of the movie: {title}");
+            bool borrowersFound = false;
+
+            foreach (var member in memberCollection.GetAllMembers())
+            {
+                if (member.HasBorrowedMovie(title))
+                {
+                    Console.WriteLine($"{member.FirstName} {member.LastName}");
+                    borrowersFound = true;
+                }
+            }
+
+            if (!borrowersFound)
+            {
+                Console.WriteLine("No members are currently borrowing this movie.");
+            }
+        }
+            
+    }
 
     // Classes for Movie, MovieCollection, Member, and MemberCollection --------------------------------- Classes for Movie and Member
     public class Movie
@@ -428,17 +527,30 @@ namespace CommunityLibraryDVD
                 int newSize = movies[index].Length - 1;
                 MovieNode[] newBucket = new MovieNode[newSize];
                 int j = 0;
+                bool movieFound = false;
+
                 for (int i = 0; i < movies[index].Length; i++)
                 {
                     if (movies[index][i].Movie.Title != title)
                     {
                         newBucket[j++] = movies[index][i];
                     }
+                    else
+                    {
+                        movieFound = true;
+                    }
                 }
-                if (j == newSize)
-                    movies[index] = newBucket;
-                else
+
+                if (movieFound && j == 0)
+                {
                     movies[index] = null; // If no movies left, set to null
+                }
+                else if (movieFound)
+                {
+                    movies[index] = newBucket;
+                }
+
+                Console.WriteLine("Movie removed successfully if it existed.");
             }
         }
 
@@ -472,7 +584,6 @@ namespace CommunityLibraryDVD
                 }
             }
         }
-
         private class MovieNode
         {
             public Movie Movie { get; private set; }
@@ -489,8 +600,9 @@ namespace CommunityLibraryDVD
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
         public string ContactNumber { get; private set; }
-        public string Password { get; private set; }  // Ensure this property is present if used for authentication
-        private List<string> borrowedMovies;
+        public string Password { get; private set; }
+        private string[] borrowedMovies;
+        private int movieCount;
 
         public Member(string firstName, string lastName, string contactNumber, string password)
         {
@@ -498,60 +610,138 @@ namespace CommunityLibraryDVD
             LastName = lastName;
             ContactNumber = contactNumber;
             Password = password;
-            borrowedMovies = new List<string>();
+            borrowedMovies = new string[5];  // Maximum of 5 borrowed movies as per previous logic
+            movieCount = 0;
         }
 
         public void BorrowMovie(string title)
         {
-            if (!borrowedMovies.Contains(title) && borrowedMovies.Count < 5)
+            if (movieCount < borrowedMovies.Length && !HasMovie(title))
             {
-                borrowedMovies.Add(title);
+                borrowedMovies[movieCount++] = title;
             }
+        }
+
+        private bool HasMovie(string title)
+        {
+            for (int i = 0; i < movieCount; i++)
+            {
+                if (borrowedMovies[i] == title)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public void ReturnMovie(string title)
         {
-            borrowedMovies.Remove(title);
+            for (int i = 0; i < movieCount; i++)
+            {
+                if (borrowedMovies[i] == title)
+                {
+                    for (int j = i; j < movieCount - 1; j++)
+                    {
+                        borrowedMovies[j] = borrowedMovies[j + 1];
+                    }
+                    borrowedMovies[--movieCount] = null;  // Clear the last element and reduce count
+                    break;
+                }
+            }
+        }
+
+        public bool HasBorrowedMovie(string title)
+        {
+            return borrowedMovies.Contains(title);
         }
 
         public void ListBorrowedMovies()
         {
-            foreach (var movie in borrowedMovies)
+            for (int i = 0; i < movieCount; i++)
             {
-                Console.WriteLine(movie);
+                Console.WriteLine(borrowedMovies[i]);
             }
         }
     }
 
+
     public class MemberCollection
     {
-        private List<Member> members = new List<Member>();
+        private Member[] members;
+        private int count;
+
+        public MemberCollection()
+        {
+            members = new Member[10]; // Starting with an initial capacity
+            count = 0;
+        }
 
         public void AddMember(Member member)
         {
-            if (!members.Any(m => m.FirstName == member.FirstName && m.LastName == member.LastName))
+            if (FindMemberIndex(member.FirstName, member.LastName) == -1)
             {
-                members.Add(member);
+                if (count == members.Length)
+                {
+                    Resize(); // Resize the array if the capacity is reached
+                }
+                members[count++] = member;
             }
+        }
+
+        private void Resize()
+        {
+            Member[] newMembers = new Member[members.Length * 2];
+            Array.Copy(members, newMembers, members.Length);
+            members = newMembers;
         }
 
         public void RemoveMember(string firstName, string lastName)
         {
-            members.RemoveAll(m => m.FirstName == firstName && m.LastName == lastName);
+            int index = FindMemberIndex(firstName, lastName);
+            if (index != -1)
+            {
+                for (int i = index; i < count - 1; i++)
+                {
+                    members[i] = members[i + 1];
+                }
+                members[--count] = null; // Decrease count and remove the last element
+            }
+        }
+
+        private int FindMemberIndex(string firstName, string lastName)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                if (members[i].FirstName == firstName && members[i].LastName == lastName)
+                {
+                    return i;
+                }
+            }
+            return -1;
         }
 
         public Member FindMember(string firstName, string lastName)
         {
-            return members.FirstOrDefault(m => m.FirstName == firstName && m.LastName == lastName);
+            int index = FindMemberIndex(firstName, lastName);
+            if (index != -1)
+            {
+                return members[index];
+            }
+            return null;
         }
 
         public void DisplayAllMembers()
         {
-            foreach (var member in members)
+            for (int i = 0; i < count; i++)
             {
-                Console.WriteLine($"Name: {member.FirstName} {member.LastName}, Contact: {member.ContactNumber}");
+                Console.WriteLine($"Name: {members[i].FirstName} {members[i].LastName}, Contact: {members[i].ContactNumber}");
             }
         }
+        public Member[] GetAllMembers()
+        {
+            return members.Take(count).ToArray(); // Return only the active members
+        }
+
     }
 }
 

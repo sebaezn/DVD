@@ -10,10 +10,26 @@ namespace CommunityLibraryDVD
         static void Main(string[] args)
         {
             while (true)
-            {
-                
-                Console.WriteLine("Welcome to the Community Library DVD Management System!");
-                Console.WriteLine("Are you a (1) Staff or (2) Member? Enter '0' to close the application.");
+            {   
+                Console.Clear(); // Clear the console
+                Console.ForegroundColor = ConsoleColor.Yellow; // Change the text color to Yellow
+                Console.WriteLine("                         ___________");
+                Console.WriteLine("                        /           ),");
+                Console.WriteLine("                       /    DVDS   /,");
+                Console.WriteLine("                      /           //");
+                Console.WriteLine("                     /__________ //");
+                Console.WriteLine("                    (___________(/");
+                Console.ResetColor(); // Reset the color to default
+                Console.ForegroundColor = ConsoleColor.Cyan; // Change the text color to Cyan
+                Console.WriteLine("#############################################################");
+                Console.WriteLine("## Welcome to the Community Library DVD Management System! ##");
+                Console.WriteLine("#############################################################");
+                Console.ResetColor(); // Reset the color to default
+                Console.WriteLine("Please choose an option:");
+                Console.WriteLine("1. Staff Login");
+                Console.WriteLine("2. Member Login");
+                Console.WriteLine("0. Exit");
+                Console.Write("Enter your choice ===> ");
                 string userType = Console.ReadLine();
                 if (userType.ToLower() == "0")
                 {
@@ -29,7 +45,11 @@ namespace CommunityLibraryDVD
                         AuthenticateMember();
                         break;
                     default:
+
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("Invalid option, please choose 1 for Staff or 2 for Member.");
+                        Console.ResetColor();
+                        Thread.Sleep(2000);
                         break;
                 }
             }
@@ -37,28 +57,32 @@ namespace CommunityLibraryDVD
         // Placeholder methods for actions in the menu ------------------------------------------------------ Methods for StaffMenu
         static void AuthenticateStaff()
         {
-            Console.WriteLine("Enter username:");
+            Console.Write("Enter username: ");
             string username = Console.ReadLine();
-            Console.WriteLine("Enter password:");
+            Console.Write("Enter password: ");
             string password = Console.ReadLine();
 
-            if (username == "staff" && password == "1")
+            if (username == "staff" && password == "1") // IMPORTANT CHANGE LATER =============================== HERE3
             {
                 StaffMenu();
             }
             else
             {
-                Console.WriteLine("Authentication failed.");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Authentication failed. Please try again.");
+                Console.ResetColor();
+                Thread.Sleep(2000);
+
             }
         }
 
         static void AuthenticateMember()
         {
-            Console.WriteLine("Enter first name:");
+            Console.Write("Enter first name: ");
             string firstName = Console.ReadLine();
-            Console.WriteLine("Enter last name:");
+            Console.Write("Enter last name: ");
             string lastName = Console.ReadLine();
-            Console.WriteLine("Enter password:");
+            Console.Write("Enter password: ");
             string password = Console.ReadLine();
 
             Member member = memberCollection.FindMember(firstName, lastName);
@@ -68,7 +92,10 @@ namespace CommunityLibraryDVD
             }
             else
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Authentication failed or member not found.");
+                Console.ResetColor();
+                Thread.Sleep(2000);
             }
         }
         // Placeholder methods for actions in the menu ------------------------------------------------------ Methods for StaffMenu
@@ -77,7 +104,14 @@ namespace CommunityLibraryDVD
             bool running = true;
             while (running)
             {
-                Console.WriteLine("\nStaff Menu:");
+                Console.Clear(); // Clear the console
+                Console.ForegroundColor = ConsoleColor.Blue; // Change the text color to Green
+                Console.WriteLine("     ####################");
+                Console.WriteLine("     #    Staff Menu    #");
+                Console.WriteLine("     ###################");
+                Console.WriteLine("=============================");
+                Console.ResetColor(); // Reset the color to default
+                Console.WriteLine("Please choose an option:");
                 Console.WriteLine("1. Add Movie");
                 Console.WriteLine("2. Remove Movie");
                 Console.WriteLine("3. Register Member");
@@ -85,7 +119,7 @@ namespace CommunityLibraryDVD
                 Console.WriteLine("5. Find Member Contact");
                 Console.WriteLine("6. List Borrowers of a Movie"); // New option
                 Console.WriteLine("7. Exit");
-
+                Console.Write("Enter your choice ===> ");
                 string choice = Console.ReadLine();
                 switch (choice)
                 {
@@ -105,7 +139,7 @@ namespace CommunityLibraryDVD
                         FindMemberContact();
                         break;
                     case "6":
-                        ListBorrowersOfMovie(); // Added missing parentheses
+                        ListBorrowersOfMovie();
                         break;
                     case "7":
                         running = false;
@@ -114,7 +148,10 @@ namespace CommunityLibraryDVD
                         DisplayAllMovies();
                         break;
                     default:
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("Invalid option, please try again.");
+                        Console.ResetColor();
+                        Thread.Sleep(2000);
                         break;
                 }
             }
@@ -126,7 +163,13 @@ namespace CommunityLibraryDVD
             bool running = true;
             while (running)
             {
-                Console.WriteLine("\nMember Menu:");
+                Console.Clear(); // Clear the console
+                Console.ForegroundColor = ConsoleColor.Blue; // Change the text color to Green
+                Console.WriteLine("     #####################");
+                Console.WriteLine("     #    Member Menu    #");
+                Console.WriteLine("     #####################");
+                Console.WriteLine("=============================");
+                Console.ResetColor(); // Reset the color to default
                 Console.WriteLine("1. View All Movies");
                 Console.WriteLine("2. View Movie Details");
                 Console.WriteLine("3. Borrow Movie");
@@ -156,7 +199,10 @@ namespace CommunityLibraryDVD
                         running = false;
                         break;
                     default:
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("Invalid option, please try again.");
+                        Console.ResetColor();
+                        Thread.Sleep(2000);
                         break;
                 }
             }
@@ -164,72 +210,131 @@ namespace CommunityLibraryDVD
 
         // Placeholder methods for actions in the menu ------------------------------------------------------ Methods for StaffMenu
     static void AddMovie()
-    {
-        Console.WriteLine("Enter movie title:");
-        string title = Console.ReadLine();
+    {   
+        Console.Clear();
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine("     #####################");
+        Console.WriteLine("     #     Add Movie    #");
+        Console.WriteLine("     #####################");
+        Console.ResetColor();
+        Console.WriteLine("=============================");
 
-        Console.WriteLine("Enter number of copies:");
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.Write("Enter movie title: ");
+        Console.ResetColor();
+        string title = Console.ReadLine();
+        if (string.IsNullOrEmpty(title))
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Title cannot be empty.");
+            Console.ResetColor();
+            Thread.Sleep(1000);
+            return;
+        }
+
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.Write("Enter number of copies: ");
+        Console.ResetColor();
         int copies;
         while (!int.TryParse(Console.ReadLine(), out copies) || copies < 0)
         {
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Invalid input. Please enter a non-negative number for the copies.");
+            Console.ResetColor();
+            Thread.Sleep(2000);
         }
 
         if (copies == 0)
-        {
+        {   
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Cannot add a movie with zero copies.");
+            Console.ResetColor();
+            Thread.Sleep(2000);
             return;
         }
 
         Movie existingMovie = movieCollection.GetMovie(title);
         if (existingMovie != null)
         {
-            existingMovie.AddCopies(copies);
-            Console.WriteLine("Additional copies added successfully.");
+            
+            existingMovie.AddCopies(copies); 
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Additional copies added successfully."); 
+            Console.ResetColor();
+            Thread.Sleep(2000);
             return;
         }
-
-        Console.WriteLine("Choose genre:");
-        Console.WriteLine("1: Drama");
-        Console.WriteLine("2: Adventure");
-        Console.WriteLine("3: Family");
-        Console.WriteLine("4: Action");
-        Console.WriteLine("5: Sci-fi");
-        Console.WriteLine("6: Comedy");
-        Console.WriteLine("7: Animated");
-        Console.WriteLine("8: Thriller");
-        Console.WriteLine("9: Other");
-        string genre = Console.ReadLine();
-        switch (genre)
-        {
-            case "1": genre = "Drama"; break;
-            case "2": genre = "Adventure"; break;
-            case "3": genre = "Family"; break;
-            case "4": genre = "Action"; break;
-            case "5": genre = "Sci-fi"; break;
-            case "6": genre = "Comedy"; break;
-            case "7": genre = "Animated"; break;
-            case "8": genre = "Thriller"; break;
-            case "9": genre = "Other"; break;
-            default: genre = "Other"; break;
+        string genre;
+        while (true)
+        {   Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("Choose genre:");
+            Console.ResetColor();
+            Console.WriteLine("1: Drama");
+            Console.WriteLine("2: Adventure");
+            Console.WriteLine("3: Family");
+            Console.WriteLine("4: Action");
+            Console.WriteLine("5: Sci-fi");
+            Console.WriteLine("6: Comedy");
+            Console.WriteLine("7: Animated");
+            Console.WriteLine("8: Thriller");
+            Console.WriteLine("9: Other");
+            Console.Write("Enter your choice ===> ");
+            string genreChoice = Console.ReadLine();
+            switch (genreChoice)
+            {
+                case "1": genre = "Drama"; break;
+                case "2": genre = "Adventure"; break;
+                case "3": genre = "Family"; break;
+                case "4": genre = "Action"; break;
+                case "5": genre = "Sci-fi"; break;
+                case "6": genre = "Comedy"; break;
+                case "7": genre = "Animated"; break;
+                case "8": genre = "Thriller"; break;
+                case "9": genre = "Other"; break;
+                default:
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Invalid choice. Please select a valid genre.");
+                    Console.ResetColor();
+                    Thread.Sleep(2000);
+                    Console.Clear();
+                    continue;
+            }
+            break;
         }
 
-        Console.WriteLine("Choose classification:");
-        Console.WriteLine("1: General (G)");
-        Console.WriteLine("2: Parental Guidance (PG)");
-        Console.WriteLine("3: Mature (M15+)");
-        Console.WriteLine("4: Mature Accompanied (MA15+)");
-        string classificationChoice = Console.ReadLine();
-        string classification = classificationChoice switch
-        {
-            "1" => "G",
-            "2" => "PG",
-            "3" => "M15+",
-            "4" => "MA15+",
-            _ => "G",
-        };
-
-        Console.WriteLine("Enter duration in minutes:");
+        string classification;
+        while (true)
+        {   
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("Choose classification:");
+            Console.ResetColor();
+            Console.WriteLine("1: General (G)");
+            Console.WriteLine("2: Parental Guidance (PG)");
+            Console.WriteLine("3: Mature (M15+)");
+            Console.WriteLine("4: Mature Accompanied (MA15+)");
+            Console.Write("Enter your choice ===> ");
+            string classificationChoice = Console.ReadLine();
+            switch (classificationChoice)
+            {
+                case "1": classification = "G"; break;
+                case "2": classification = "PG"; break;
+                case "3": classification = "M15+"; break;
+                case "4": classification = "MA15+"; break;
+                default:
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Invalid option, please try again.");
+                    Console.ResetColor();
+                    Thread.Sleep(2000);
+                    continue;
+            }
+            break;
+        }
+        Console.WriteLine();
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.Write("Enter duration in minutes: ");
+        Console.ResetColor();
         int duration;
         while (!int.TryParse(Console.ReadLine(), out duration))
         {
@@ -238,34 +343,59 @@ namespace CommunityLibraryDVD
 
         Movie movie = new Movie(title, genre, classification, duration, copies);
         movieCollection.AddMovie(movie);
+        Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("Movie added successfully.");
+        Console.ResetColor();
+        Thread.Sleep(2000);
+
     }
 
         // Placeholder methods for actions in the menu ------------------------------------------------------ Methods for StaffMenu
        static void RemoveMovie()
         {
-            Console.WriteLine("Enter movie title to remove:");
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("     #####################");
+            Console.WriteLine("     #    Remove Movie    #");
+            Console.WriteLine("     #####################");
+            Console.ResetColor();
+            Console.WriteLine("=============================");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("Enter movie title to remove: ");
+            Console.ResetColor();
             string title = Console.ReadLine();
             
             Movie movie = movieCollection.GetMovie(title);
             if (movie == null)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Movie not found.");
+                Console.ResetColor();
+                Thread.Sleep(2000);
                 return;
             }
             
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine($"Current number of copies: {movie.Copies}");
-            Console.WriteLine("Enter the number of copies to remove:");
+            Console.Write("Enter the number of copies to remove: ");
+            Console.ResetColor();
+            
             
             int copiesToRemove;
             while (!int.TryParse(Console.ReadLine(), out copiesToRemove) || copiesToRemove <= 0)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Invalid input. Please enter a positive number for the copies.");
+                Console.ResetColor();
+                Thread.Sleep(2000);
             }
 
             if (copiesToRemove > movie.Copies)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Cannot remove more copies than available.");
+                Console.ResetColor();
+                Thread.Sleep(2000);
                 return;
             }
 
@@ -274,11 +404,17 @@ namespace CommunityLibraryDVD
             if (movie.Copies == 0)
             {
                 movieCollection.RemoveMovie(title);
-                Console.WriteLine("All copies removed. Movie information deleted from the system.");
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("All copies REMOVED. Movie information deleted from the system. Please wait until the next update.");
+                Console.ResetColor();
+                Thread.Sleep(4000);
             }
             else
             {
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine($"Remaining number of copies: {movie.Copies}");
+                Console.ResetColor();
+                Thread.Sleep(2000);
             }
         }
 
@@ -286,166 +422,326 @@ namespace CommunityLibraryDVD
 
        static void RegisterMember() 
         {
-            Console.WriteLine("Enter first name:");
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("     #####################");
+            Console.WriteLine("     #  Register Member  #");
+            Console.WriteLine("     #####################");
+            Console.ResetColor();
+            Console.WriteLine("=============================");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("Enter first name: ");
+            Console.ResetColor();
             string firstName = Console.ReadLine();
-            Console.WriteLine("Enter last name:");
+            if (string.IsNullOrEmpty(firstName))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("First name cannot be empty.");
+                Console.ResetColor();
+                Thread.Sleep(2000);
+                return;
+            }
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("Enter last name: ");
+            Console.ResetColor();
             string lastName = Console.ReadLine();
+            if (string.IsNullOrEmpty(lastName))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Last name cannot be empty.");
+                Console.ResetColor();
+                Thread.Sleep(2000);
+                return;
+            }
 
             // Check if the member already exists
             if (memberCollection.FindMember(firstName, lastName) != null)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Member already exists.");
+                Console.ResetColor();
+                Thread.Sleep(2000);
                 return;
             }
 
-            Console.WriteLine("Enter contact number:");
-            string contactNumber = Console.ReadLine();
+            string contactNumber;
+            while (true)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write("Enter contact number: ");
+                Console.ResetColor();
+                contactNumber = Console.ReadLine();
+                if (string.IsNullOrEmpty(contactNumber))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Contact number cannot be empty.");
+                    Console.ResetColor();
+                    Thread.Sleep(2000);
+                }
+                else if (contactNumber.Length != 1 || !contactNumber.All(char.IsDigit)) // IMPORTANT CHANGE LATER =============================== HERE 
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Invalid contact number. Please enter a 10-digit numeric contact number.");
+                    Console.ResetColor();
+                    Thread.Sleep(2000);
+                }
+                else
+                {
+                    break;
+                }
+            }
 
             string password;
             while (true)
             {
-                Console.WriteLine("Set a 4-digit password:");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write("Set a 4-digit password: ");
+                Console.ResetColor();
                 password = Console.ReadLine();
                 if (password.Length == 4 && int.TryParse(password, out _))
                 {
                     break;
                 }
                 else
-                {
+                {   Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Invalid password. Please enter a 4-digit numeric password.");
+                    Console.ResetColor();
+                    Thread.Sleep(2000);
                 }
             }
 
             Member member = new Member(firstName, lastName, contactNumber, password);
             memberCollection.AddMember(member);
-
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Member registered successfully.");
+            Console.ResetColor();
+            Thread.Sleep(2000);
         }
 
 
         static void RemoveMember()
         {
-            Console.WriteLine("Enter first name of member to remove:");
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("     #####################");
+            Console.WriteLine("     #    Remove Member    #");
+            Console.WriteLine("     #####################");
+            Console.ResetColor();
+            Console.WriteLine("=============================");
+            
+            
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("Enter first name of member to remove: ");
+            Console.ResetColor();
             string firstName = Console.ReadLine();
-            Console.WriteLine("Enter last name of member to remove:");
-            string lastName = Console.ReadLine();
+            if (string.IsNullOrEmpty(firstName))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("First name cannot be empty.");
+                Console.ResetColor();
+                Thread.Sleep(2000);
+                return;
+            }
 
-            memberCollection.RemoveMember(firstName, lastName);
-            Console.WriteLine("Member removed successfully if they existed and had no borrowed DVDs.");
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("Enter last name of member to remove: ");
+            Console.ResetColor();
+            string lastName = Console.ReadLine();
+            if (string.IsNullOrEmpty(lastName))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Last name cannot be empty.");
+                Console.ResetColor();
+                Thread.Sleep(2000);
+                return;
+            }
+
+            Member member = memberCollection.FindMember(firstName, lastName);
+
+            if (member != null)
+            {
+                if (member.GetBorrowedMovies().Length == 0)
+                {
+        
+                    memberCollection.RemoveMember(firstName, lastName);
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("Member removed successfully.");
+                    Console.ResetColor();
+                    Thread.Sleep(2000);
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Cannot remove member. They have borrowed DVDs.");
+                    Console.ResetColor();
+                    Thread.Sleep(2000);
+                }
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Member not found.");
+                Console.ResetColor();
+                Thread.Sleep(2000);
+            }
         }
+
 
         static void FindMemberContact()
         {
-            Console.WriteLine("Enter first name of the member:");
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("     #####################");
+            Console.WriteLine("     #Find Member Contact#");
+            Console.WriteLine("     #####################");
+            Console.ResetColor();
+            Console.WriteLine("=============================");
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("Enter first name of the member: ");
+            Console.ResetColor();
             string firstName = Console.ReadLine();
-            Console.WriteLine("Enter last name of the member:");
+            if (string.IsNullOrEmpty(firstName))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("First name cannot be empty.");
+                Console.ResetColor();
+                Thread.Sleep(2000);
+                return;
+            }
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("Enter last name of the member: ");
+            Console.ResetColor();
             string lastName = Console.ReadLine();
+            if (string.IsNullOrEmpty(lastName))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Last name cannot be empty.");
+                Console.ResetColor();
+                Thread.Sleep(2000);
+                return;
+            }
 
             Member member = memberCollection.FindMember(firstName, lastName);
             if (member != null)
             {
+                Console.ForegroundColor = ConsoleColor.Blue;
                 Console.WriteLine($"Contact number for {firstName} {lastName} is {member.ContactNumber}");
+                Console.Write("Press Enter to continue...");  // Prompt the user to press Enter
+                Console.ReadLine();  // Waits for the user to press Enter
+                
             }
             else
-            {
+            {   
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Member not found.");
+                Console.ResetColor();
+                Thread.Sleep(2000);
             }
         }
 
         static void DisplayAllMovies()
-        {
+        {   
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("     #####################");
+            Console.WriteLine("     #  All Movies List  #");
+            Console.WriteLine("     #####################");
+            Console.ResetColor();
+            Console.WriteLine("=============================");
             movieCollection.DisplayAllMovies();
+            Console.Write("Press Enter to continue...");
+            Console.ReadLine();
         }
 
         static void ViewMovieDetails()
         {
-            Console.WriteLine("Enter movie title to view details:");
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("     #####################");
+            Console.WriteLine("     #  Movies Details   #");
+            Console.WriteLine("     #####################");
+            Console.ResetColor();
+            Console.WriteLine("=============================");
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("Enter movie title to view details: ");
+            Console.ResetColor();
             string title = Console.ReadLine();
+            if (string.IsNullOrEmpty(title))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Title cannot be empty.");
+                Console.ResetColor();
+                Thread.Sleep(2000);
+                return;
+            }
 
             Movie movie = movieCollection.GetMovie(title);
             if (movie != null)
             {
+                Console.ForegroundColor = ConsoleColor.Blue;
                 movie.DisplayInfo();
+                Console.ResetColor();
+                Console.Write("Press Enter to continue...");  
+                Console.ReadLine();  
+
             }
             else
             {
                 Console.WriteLine("Movie not found.");
             }
         }
-
-       static void BorrowMovie(Member member)
+         static void ListBorrowedMovies(Member member)
         {
-            Console.WriteLine("Enter title of the movie to borrow:");
-            string title = Console.ReadLine();
-            Movie movie = movieCollection.GetMovie(title);
-
-            if (movie != null)
-            {
-                if (movie.Copies > 0)
-                {
-                    if (!member.HasBorrowedMovie(title))
-                    {
-                        member.BorrowMovie(title);
-                        movie.AddCopies(-1); // Decrease the number of available copies
-                        Console.WriteLine("Movie borrowed successfully.");
-                    }
-                    else
-                    {
-                        Console.WriteLine("You have already borrowed this movie.");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Cannot borrow the movie. There are no available copies.");
-                }
-            }
-            else
-            {
-                Console.WriteLine("Movie not available.");
-            }
-        }
-
-
-        static void ReturnMovie(Member member)
-        {
-            Console.WriteLine("Enter title of the movie to return:");
-            string title = Console.ReadLine();
-            Movie movie = movieCollection.GetMovie(title);
-
-            if (movie != null)
-            {
-                if (member.HasBorrowedMovie(title))
-                {
-                    member.ReturnMovie(title);
-                    movie.AddCopies(1); // Increase the number of available copies
-                    Console.WriteLine("Movie returned successfully.");
-                }
-                else
-                {
-                    Console.WriteLine("You haven't borrowed this movie.");
-                }
-            }
-            else
-            {
-                Console.WriteLine("Movie not found in the collection.");
-            }
-        }
-
-        static void ListBorrowedMovies(Member member)
-        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("     #####################");
+            Console.WriteLine("     #  Borrowed Movies  #");
+            Console.WriteLine("     #####################");
+            Console.ResetColor();
+            Console.WriteLine("=============================");
+            
             Console.WriteLine("Movies currently borrowed:");
+            Console.ForegroundColor = ConsoleColor.Blue;
             member.ListBorrowedMovies();
+            Console.ResetColor();
+            Console.Write("Press Enter to continue...");
+            Console.ReadLine();
         }
 
         static void ListBorrowersOfMovie()
         {
-            Console.WriteLine("Enter movie title to list borrowers:");
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("     #####################");
+            Console.WriteLine("     #  List Borrowers   #");
+            Console.WriteLine("     #####################");
+            Console.ResetColor();
+            Console.WriteLine("=============================");
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("Enter movie title to list borrowers: ");
+            Console.ResetColor();
             string title = Console.ReadLine();
+            if (string.IsNullOrEmpty(title))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Title cannot be empty.");
+                Console.ResetColor();
+                Thread.Sleep(2000);
+                return;
+            }
 
             Movie movie = movieCollection.GetMovie(title);
             if (movie == null)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Movie not found.");
+                Console.ResetColor();
+                Thread.Sleep(2000);
                 return;
             }
 
@@ -456,14 +752,139 @@ namespace CommunityLibraryDVD
             {
                 if (member.HasBorrowedMovie(title))
                 {
+                    Console.ForegroundColor = ConsoleColor.Blue;
                     Console.WriteLine($"{member.FirstName} {member.LastName}");
+                    Console.ResetColor();
+                    Console.Write("Press Enter to continue...");  // Prompt the user to press Enter
+                    Console.ReadLine();  // Waits for the user to press Enter
                     borrowersFound = true;
                 }
+
             }
 
             if (!borrowersFound)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("No members are currently borrowing this movie.");
+                Console.ResetColor();
+                Thread.Sleep(4000);
+            }
+
+        }
+
+       static void BorrowMovie(Member member)
+        {
+            if (member.GetBorrowedMovies().Length >= 5)
+            {   
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("You cannot borrow more than 5 movies at a time.");
+                Console.ResetColor();
+                Thread.Sleep(3000);
+                return;
+            }
+
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("     #####################");
+            Console.WriteLine("     #   Borrow a Movie  #");
+            Console.WriteLine("     #####################");
+            Console.ResetColor();
+            Console.WriteLine("=============================");
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("Enter title of the movie to borrow:");
+            Console.ResetColor();
+            string title = Console.ReadLine();
+            if (string.IsNullOrEmpty(title))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Title cannot be empty.");
+                Console.ResetColor();
+                Thread.Sleep(2000);
+                return;
+            }
+
+            Movie movie = movieCollection.GetMovie(title);
+
+            if (movie != null)
+            {
+                if (movie.Copies > 0)
+                {
+                    if (!member.HasBorrowedMovie(title))
+                    {
+                        member.BorrowMovie(title);
+                        movie.AddCopies(-1);
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("Movie borrowed successfully.");
+                        Console.ResetColor();
+                        Thread.Sleep(2000);
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("You have already borrowed this movie.");
+                        Console.ResetColor();
+                        Thread.Sleep(2000);
+                    }
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Cannot borrow the movie. There are no available copies.");
+                    Console.ResetColor();
+                    Thread.Sleep(2000);
+                }
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Movie not available.");
+                Console.ResetColor();
+                Thread.Sleep(2000);
+            }
+        }
+
+
+        static void ReturnMovie(Member member)
+        {
+            Console.WriteLine("Enter title of the movie to return:");
+            string title = Console.ReadLine();
+            if (string.IsNullOrEmpty(title))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Title cannot be empty.");
+                Console.ResetColor();
+                Thread.Sleep(2000);
+                return;
+            }
+
+            Movie movie = movieCollection.GetMovie(title);
+
+            if (movie != null)
+            {
+                if (member.HasBorrowedMovie(title))
+                {
+                    member.ReturnMovie(title);
+                    movie.AddCopies(1);
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("Movie returned successfully.");
+                    Console.ResetColor();
+                    Thread.Sleep(2000);
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("You haven't borrowed this movie.");
+                    Console.ResetColor();
+                    Thread.Sleep(2000);
+                }
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Movie not found in the collection.");
+                Console.ResetColor();
+                Thread.Sleep(2000);
             }
         }
             
@@ -656,6 +1077,17 @@ namespace CommunityLibraryDVD
             }
         }
 
+        public string[] GetBorrowedMovies()
+        {
+            return borrowedMovies.Take(movieCount).ToArray();
+        }
+
+        public bool HasBorrowedMovie(string title)
+        {
+            return borrowedMovies.Contains(title);
+        }
+
+
         private bool HasMovie(string title)
         {
             for (int i = 0; i < movieCount; i++)
@@ -682,11 +1114,6 @@ namespace CommunityLibraryDVD
                     break;
                 }
             }
-        }
-
-        public bool HasBorrowedMovie(string title)
-        {
-            return borrowedMovies.Contains(title);
         }
 
         public void ListBorrowedMovies()
